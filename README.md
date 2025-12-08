@@ -5,7 +5,7 @@
 **Give form to your infrastructure.**  
 _The AI Architect that converts natural language into budget-aware, compliant Infrastructure-as-Code._
 
-[stackframe.vercel.app](https://stackframe.vercel.app) • [oumi.ai](https://oumi.ai) • [kestra.io](https://kestra.io) • [Cline](https://www.google.com/search?q=https://github.com/cline-cli/cline) • [CodeRabbit](https://coderabbit.ai)
+[stackframe.vercel.app](https://stackframe.vercel.app) • [oumi.ai](https://oumi.ai) • [kestra.io](https://kestra.io) • [Cline](https://docs.cline.bot/introduction/welcome) • [CodeRabbit](https://coderabbit.ai)
 
 </div>
 

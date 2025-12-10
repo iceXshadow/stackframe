@@ -1,65 +1,163 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { motion } from "motion/react";
+import { ArrowRight, Sparkles, Command, Brain, Shield, Layers } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
+export default function LandingPage() {
+  const [query, setQuery] = useState("");
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden selection:bg-white/10">
+      
+      {/* Hero Section - Center Screen */}
+      <section className="min-h-screen flex flex-col items-center justify-center px-6">
+        <div className="max-w-6xl mx-auto text-center space-y-12">
+          
+          {/* Massive Heading */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-7xl md:text-9xl font-bold tracking-tight text-white mb-12"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Infrastructure,
+            <br />
+            realized.
+          </motion.h1>
+
+          {/* Glowing Floating Input Bar */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full max-w-3xl mx-auto relative group"
           >
-            Documentation
-          </a>
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-white/20 rounded-full blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+            
+            <div className="relative flex items-center bg-[#1A1A1A] rounded-full border border-white/10 hover:border-white/20 transition-colors p-1.5 shadow-2xl">
+              <Command className="ml-5 w-5 h-5 text-gray-500" />
+              <input 
+                type="text" 
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Describe your cloud..." 
+                className="w-full bg-transparent border-none text-base text-white placeholder-gray-600 focus:ring-0 px-4 py-4 outline-none"
+              />
+              <Link href="/demo">
+                <button className="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition-all flex items-center gap-2 mr-1">
+                  Generate <ArrowRight className="w-4 h-4" />
+                </button>
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Subtle hint text */}
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-sm text-gray-600"
+          >
+            Powered by intelligent orchestration, RLHF, and security analysis
+          </motion.p>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Bento Grid - Below the Fold */}
+      <section className="min-h-screen flex items-center justify-center px-6 pb-20">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            
+            {/* Card 1: The Brain - Kestra */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="group relative bg-[#131313] border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all duration-300 overflow-hidden"
+            >
+              {/* Subtle glow */}
+              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative z-10 flex flex-col h-full space-y-6">
+                <div className="flex items-center justify-between">
+                  <Brain className="w-10 h-10 text-blue-400" />
+                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></div>
+                </div>
+                
+                <div className="flex-1 space-y-3">
+                  <h3 className="text-2xl font-semibold text-white">Kestra</h3>
+                  <p className="text-base text-gray-400">Orchestrated Decisions.</p>
+                </div>
+
+                <div className="text-xs text-gray-600 font-mono">THE BRAIN</div>
+              </div>
+            </motion.div>
+
+            {/* Card 2: The Architect - Oumi */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="group relative bg-[#131313] border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all duration-300 overflow-hidden"
+            >
+              {/* Subtle glow */}
+              <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative z-10 flex flex-col h-full space-y-6">
+                <div className="flex items-center justify-between">
+                  <Layers className="w-10 h-10 text-purple-400" />
+                  <div className="w-3 h-3 rounded-full bg-purple-400 animate-pulse"></div>
+                </div>
+                
+                <div className="flex-1 space-y-3">
+                  <h3 className="text-2xl font-semibold text-white">Oumi</h3>
+                  <p className="text-base text-gray-400">RLHF Intelligence.</p>
+                </div>
+
+                <div className="text-xs text-gray-600 font-mono">THE ARCHITECT</div>
+              </div>
+            </motion.div>
+
+            {/* Card 3: The Guard - CodeRabbit */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="group relative bg-[#131313] border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all duration-300 overflow-hidden"
+            >
+              {/* Subtle glow */}
+              <div className="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative z-10 flex flex-col h-full space-y-6">
+                <div className="flex items-center justify-between">
+                  <Shield className="w-10 h-10 text-green-400" />
+                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+                </div>
+                
+                <div className="flex-1 space-y-3">
+                  <h3 className="text-2xl font-semibold text-white">CodeRabbit</h3>
+                  <p className="text-base text-gray-400">Security Shield.</p>
+                </div>
+
+                <div className="text-xs text-gray-600 font-mono">THE GUARD</div>
+              </div>
+            </motion.div>
+
+          </motion.div>
+        </div>
+      </section>
+    </main>
   );
 }

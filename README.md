@@ -5,7 +5,7 @@
 **Give form to your infrastructure.**  
 _The AI Architect that converts natural language into budget-aware, compliant Infrastructure-as-Code._
 
-[stackframe.vercel.app](https://stackframe.vercel.app) • [oumi.ai](https://oumi.ai) • [kestra.io](https://kestra.io) • [Cline](https://docs.cline.bot/introduction/welcome) • [CodeRabbit](https://coderabbit.ai)
+[stackframe.vercel.app](https://stackframe.vercel.app) • [oumi.ai](https://oumi.ai) • [kestra.io](https://kestra.io) • [CodeRabbit](https://coderabbit.ai)
 
 </div>
 
@@ -15,19 +15,19 @@ Startups and developers struggle to set up cloud infrastructure that is secure, 
 
 ## 💡 The Solution: Stackframe
 
-Stackframe is an autonomous “Platform Engineer in a Box.” You describe what you need, the Oumi-trained AI architect generates the Terraform, Kestra validates it against pricing and budgets, CodeRabbit audits it, and Cline deploys it. A full infra lifecycle handled by intelligent automation.
+Stackframe is an autonomous “Platform Engineer in a Box.” You describe what you need, the Oumi-trained AI architect generates the Terraform, Kestra validates it against pricing and budgets, CodeRabbit audits it, and GitHub Actions deploys it. A full infra lifecycle handled by intelligent automation.
 
 ## 🏆 Prize Tracks & Integrations
 
 This project was built to maximize sponsor technology usage.
 
-|            Sponsor            | Integration                                                    |     Status      |
-| :---------------------------: | :------------------------------------------------------------- | :-------------: |
-|     **Wakanda (Kestra)**      | AI Agent for pricing intelligence and budget-gate decisions    | [ ] Implemented |
-| **Iron Intelligence (Oumi)**  | RLHF-tuned model that generates valid, optimized Terraform HCL | [ ] Implemented |
-|  **Infinity Build (Cline)**   | CLI automation for init, plan, and apply stages                | [ ] Implemented |
-| **Captain Code (CodeRabbit)** | Automated IaC security review on every PR                      | [ ] Implemented |
-|   **Stormbreaker (Vercel)**   | Next.js dashboard deployed as the real-time control center     | [ ] Implemented |
+|               Sponsor               | Integration                                                    |     Status      |
+| :---------------------------------: | :------------------------------------------------------------- | :-------------: |
+|        **Wakanda (Kestra)**         | AI Agent for pricing intelligence and budget-gate decisions    | [ ] Implemented |
+|    **Iron Intelligence (Oumi)**     | RLHF-tuned model that generates valid, optimized Terraform HCL | [ ] Implemented |
+| **Infinity Build (GitHub Actions)** | CLI automation for init, plan, and apply stages                | [ ] Implemented |
+|    **Captain Code (CodeRabbit)**    | Automated IaC security review on every PR                      | [ ] Implemented |
+|      **Stormbreaker (Vercel)**      | Next.js dashboard deployed as the real-time control center     | [ ] Implemented |
 
 ## ⚙️ Architecture
 

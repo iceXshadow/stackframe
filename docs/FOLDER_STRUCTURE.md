@@ -5,118 +5,65 @@
 ```
 stackframe/
 ├── 📂 .github/
-│   └── 📂 workflows/                # NEW: Replaces Cline
+│   └── 📂 workflows/                # (Coming Next: GitHub Actions for Deployment)
 │       └── terraform.yml            # The "Action" that deploys your infra
 │
 ├── 📂 src/
 │   ├── 📂 app/
 │   │   ├── 📂 api/
 │   │   │   ├── 📂 generate/         # POST: Trigger Kestra flow
+│   │   │   │   └── route.ts         # ✅ Updated to call Kestra API
+│   │   │   ├── 📂 webhooks/         # (Coming Soon: Listen for Git Action success)
 │   │   │   │   └── route.ts
-│   │   │   ├── 📂 webhooks/         # NEW: Listen for GitHub Action success/fail
+│   │   │   ├── 📂 feedback/         # (Optional: Submit RLHF feedback)
 │   │   │   │   └── route.ts
-│   │   │   ├── 📂 feedback/         # POST: Submit RLHF feedback (Oumi)
-│   │   │   │   └── route.ts
-│   │   ├── 📂 dashboard/            # The Main Demo App (After Landing)
-│   │   │   └── page.tsx
+│   │   ├── 📂 dashboard/            # The Main Demo App
+│   │   │   └── page.tsx             # ✅ "Mission Control" UI
 │   │   ├── layout.tsx
-│   │   ├── page.tsx                 # The "Apple Style" Landing Page
+│   │   ├── page.tsx                 # ✅ "Apple Style" Landing Page
 │   │   └── globals.css
 │   │
 │   ├── 📂 components/
-│   │   ├── 📂 landing/              # NEW: Landing page specific components
-│   │   │   ├── Hero.tsx             # "Infrastructure, realized."
-│   │   │   ├── MagicInput.tsx       # The Spotlight search bar
-│   │   │   └── BentoGrid.tsx        # Feature showcase
-│   │   ├── 📂 dashboard/            # App components
+│   │   ├── 📂 landing/              # Landing page components
+│   │   │   ├── Hero.tsx
+│   │   │   ├── MagicInput.tsx
+│   │   │   └── BentoGrid.tsx
+│   │   ├── 📂 dashboard/            # Dashboard components
 │   │   │   ├── ArchitectureView.tsx
 │   │   │   ├── CostCard.tsx
-│   │   │   └── Terminal.tsx         # Fake terminal showing logs
+│   │   │   └── Terminal.tsx
 │   │
-│   ├── 📂 lib/
+│   ├── 📂 lib/                      # Shared Logic
 │   │   ├── 📂 integrations/
-│   │   │   ├── kestra.ts            # Kestra API client
-│   │   │   ├── oumi.ts              # Oumi model inference
-│   │   │   └── github.ts            # GitHub API (create PRs)
+│   │   │   ├── kestra.ts
+│   │   │   ├── oumi.ts
+│   │   │   └── github.ts
 │   │   └── 📂 utils/
 │   │       └── pricing.ts
 │
-├── 📂 kestra/                       # Kestra Workflows (The Brain)
-│   ├── 📂 flows/
-│   │   ├── generate-infra.yaml      # 1. Receive text -> Call Oumi -> Commit to Git
-│   │   └── governance.yaml          # 2. Check Budget -> Approve/Reject
-│   └── docker-compose.yml           # Run Kestra locally
+├── 📂 kestra/                       # ✅ The Brain (Orchestrator)
+│   ├── docker-compose.yml           # ✅ Runs Kestra + Oumi together
+│   ├── 📂 flows/                    # (Optional: Store local copies of flows)
+│   │   ├── stackframe-architect.yaml # The Flow definition we pasted into UI
+│   │   └── governance.yaml
 │
-├── 📂 oumi/                         # Oumi Engine (The Architect)
-│   ├── 📂 data/
-│   │   └── terraform-instruct.jsonl # Training data
-│   ├── inference.py                 # Python script to generate HCL
-│   └── Dockerfile
+├── 📂 oumi/                         # ✅ The Intelligence (AI Engine)
+│   ├── main.py                      # ✅ FastAPI app (The "Mock" Oumi)
+│   ├── Dockerfile                   # ✅ Python Docker config
+│   ├── requirements.txt             # ✅ Dependencies
+│   └── 📂 data/                     # (Optional: Training data for RLHF)
+│       └── terraform-instruct.jsonl
 │
-├── 📂 terraform/                    # Terraform Templates
-│   ├── main.tf                      # The file Oumi writes to
+├── 📂 terraform/                    # (Coming Next: The Output)
+│   ├── main.tf                      # The file Oumi will eventually write to
 │   └── backend.tf
 │
-├── .coderabbit.yaml                 # Security Auditor Config
-├── .env.local
+├── .coderabbit.yaml                 # ✅ Security Auditor Config
+├── .env.local                       # Environment variables
 ├── package.json
 ├── tailwind.config.ts
+├── tsconfig.json
 └── README.md
 ```
 
 ## 🎯 Key Directories Explained
-
-### **src/app/api/** - API Routes
-
-- Each folder represents an API endpoint
-- Handles communication between frontend and backend services
-
-### **src/components/** - React Components
-
-- `features/` - Complex, feature-specific components
-- `ui/` - Simple, reusable UI building blocks
-- `layout/` - Page layout components
-
-### **src/lib/integrations/** - Sponsor Integrations
-
-- `kestra.ts` - For Wakanda Award ($4k)
-- `oumi.ts` - For Iron Intelligence Award ($3k)
-- `cline.ts` - For Infinity Build Award ($5k)
-- `github.ts` - For Captain Code Award ($1k)
-
-### **kestra/** - Workflow Orchestration
-
-- YAML files defining Kestra flows
-- AI Agent decision logic
-
-### **oumi/** - ML Training
-
-- Training scripts for RLHF
-- Feedback dataset collection
-
-### **cline/** - CLI Automation
-
-- Task definitions for infrastructure operations
-- Deployment scripts
-
-### **terraform/** - IaC Templates
-
-- Reusable modules for common infrastructure patterns
-- Generated templates based on requirements
-
-## 🚀 Quick Start
-
-1. Create the folder structure manually
-2. Start with the core files: `package.json`, `.env.example`, config files
-3. Build API routes one by one
-4. Create components as you need them
-5. Set up integrations last
-
-## 💡 Learning Path Recommendation
-
-**Day 1:** Core structure + API routes
-**Day 2:** Kestra flows + Oumi basics
-**Day 3:** Cline tasks + Frontend components
-**Day 4:** Integration + Polish
-
-Good luck building! 🎉

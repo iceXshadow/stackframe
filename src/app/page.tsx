@@ -104,7 +104,7 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex-1 space-y-2 sm:space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">Kestra</h3>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white">Kestra</h2>
                   <p className="text-sm sm:text-base text-zinc-400">Orchestrated Decisions.</p>
                 </div>
 
@@ -136,7 +136,7 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex-1 space-y-2 sm:space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">Oumi</h3>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white">Oumi</h2>
                   <p className="text-sm sm:text-base text-zinc-400">RLHF Intelligence.</p>
                 </div>
 
@@ -168,7 +168,7 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex-1 space-y-2 sm:space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">CodeRabbit</h3>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white">CodeRabbit</h2>
                   <p className="text-sm sm:text-base text-zinc-400">Security Shield.</p>
                 </div>
 
@@ -208,7 +208,7 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex-1 space-y-2 sm:space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">GitHub</h3>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white">GitHub</h2>
                   <p className="text-sm sm:text-base text-zinc-400">Version Control Hub</p>
                 </div>
 
@@ -240,7 +240,7 @@ export default function LandingPage() {
                 </div>
                 
                 <div className="flex-1 space-y-2 sm:space-y-3">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">Vercel</h3>
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white">Vercel</h2>
                   <p className="text-sm sm:text-base text-zinc-400">Frictionless Deployment.</p>
                 </div>
 

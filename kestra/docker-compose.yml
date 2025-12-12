@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  kestra:
+    image: kestra/kestra:latest
+    container_name: kestra
+    command: server standalone
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/kestra
+            driverClassName: org.postgresql.Driver
+            username: kestra
+            password: kestraPassword
+        kestra:
+          server:
+            basic-auth:
+              enabled: false
+          repository:
+            type: postgres
+          queue:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+    depends_on:
+      - postgres
+    networks:
+      - stackframe-net
+    
+  postgres:
+    image: postgres:15-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kestra
+      POSTGRES_PASSWORD: kestraPassword
+      POSTGRES_DB: kestra
+    networks:
+      - stackframe-net
+
+  oumi-engine:
+    build:
+      context: ../oumi
+      dockerfile: Dockerfile
+    container_name: oumi-engine
+    ports:
+      - "8000:8000"
+    networks:
+      - stackframe-net
+
+volumes:
+  postgres-data:
+
+networks:
+  stackframe-net:
+    driver: bridge

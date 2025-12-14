@@ -1,0 +1,135 @@
+# WARNING: This docker-compose.yml is configured for LOCAL DEVELOPMENT ONLY
+# 
+# SECURITY NOTICE:
+# - The Docker socket access is proxied through docker-socket-proxy for security
+# - NEVER mount /var/run/docker.sock directly in production environments
+# - For production, use:
+#   1. Docker-socket-proxy (implemented below - recommended)
+#   2. Docker-in-Docker (dind) with TCP DOCKER_HOST
+#   3. Rootless Docker/Podman with limited socket access
+#
+# AUTHENTICATION SECURITY:
+# - Basic auth is enabled for local development (default credentials)
+# - Kestra UI is bound to localhost (127.0.0.1) for security
+# - For production deployments:
+#   * Configure OAuth2/OIDC authentication (Google, GitHub, Azure AD, etc.)
+#   * Use proper secrets management for credentials
+#   * Do NOT expose port 8080 to external networks
+#   * Use a reverse proxy (nginx/Traefik) with TLS
+#   * Implement network policies and firewall rules
+#
+# CREDENTIALS MANAGEMENT:
+# - Database credentials are externalized via environment variables
+# - Create a .env file in this directory with the required variables (see below)
+# - IMPORTANT: Add .env to .gitignore - NEVER commit credentials to version control
+# - For production, use Docker secrets or external secrets managers (HashiCorp Vault, AWS Secrets Manager, etc.)
+# - Required environment variables:
+#   * POSTGRES_USER - PostgreSQL username
+#   * POSTGRES_PASSWORD - PostgreSQL password
+#   * POSTGRES_DB - PostgreSQL database name
+#   * KESTRA_BASIC_AUTH_USERNAME - Kestra admin username
+#   * KESTRA_BASIC_AUTH_PASSWORD - Kestra admin password
+#
+# To use INSECURE direct socket mount for local dev only, uncomment the volume
+# mount below and comment out the DOCKER_HOST environment variable. This should
+# NEVER be done in production.
+
+services:
+  # Docker Socket Proxy - provides secure, limited access to Docker API
+  # Only exposes necessary Docker API endpoints to Kestra
+  # SECURITY: POST and BUILD are disabled (set to 0) for least privilege
+  # Kestra only requires read access to: CONTAINERS, IMAGES, INFO, NETWORKS, VOLUMES
+  # This prevents arbitrary container creation or image building through the proxy
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: docker-socket-proxy
+    environment:
+      - CONTAINERS=1    # Required: List and inspect containers
+      - IMAGES=1        # Required: List and inspect images
+      - INFO=1          # Required: Get Docker daemon info
+      - NETWORKS=1      # Required: List and inspect networks
+      - VOLUMES=1       # Required: List and inspect volumes
+      - POST=0          # DISABLED: Prevents container/image creation
+      - BUILD=0         # DISABLED: Prevents image building
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - stackframe-net
+    restart: unless-stopped
+
+  kestra:
+    image: kestra/kestra:latest
+    container_name: kestra
+    command: server standalone
+    ports:
+      # Bind to localhost only for security - change to "8080:8080" to expose externally (NOT RECOMMENDED)
+      - "127.0.0.1:8080:8080"
+    volumes:
+      # INSECURE: Uncomment only for local development, NEVER in production
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - kestra-storage:/app/storage
+    environment:
+      # Use docker-socket-proxy for secure Docker API access
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+            driverClassName: org.postgresql.Driver
+            username: ${POSTGRES_USER}
+            password: ${POSTGRES_PASSWORD}
+        kestra:
+          server:
+            basic-auth:
+              enabled: true
+              username: ${KESTRA_BASIC_AUTH_USERNAME}
+              password: ${KESTRA_BASIC_AUTH_PASSWORD}
+          repository:
+            type: postgres
+          queue:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+    depends_on:
+      - postgres
+      - docker-socket-proxy
+    networks:
+      - stackframe-net
+    
+  postgres:
+    image: postgres:15.15-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      # Database credentials loaded from environment variables (.env file)
+      # For production: use Docker secrets (secrets: block) or external secrets manager
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - stackframe-net
+
+  oumi-engine:
+    build:
+      context: ../oumi
+      dockerfile: Dockerfile
+    container_name: oumi-engine
+    ports:
+      # Bind to localhost only for local development
+      - "127.0.0.1:8000:8000"
+    environment:
+      # API key for Oumi engine authentication
+      # For production: use Docker secrets or external secrets manager
+      OUMI_API_KEY: ${OUMI_API_KEY}
+    networks:
+      - stackframe-net
+
+volumes:
+  postgres-data:
+  kestra-storage:
+
+networks:
+  stackframe-net:
+    driver: bridge

@@ -35,14 +35,14 @@ export default function Navbar() {
           {/* Right Side */}
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
-              href="/"
+              href="/dashboard"
               className="px-4 sm:px-5 py-1.5 sm:py-2 bg-white text-black rounded-md text-sm font-medium hover:bg-zinc-200 transition-all"
             >
-              Try Demo
+              Dashboard
             </Link>
             
             <a
-              href="https://github.com"
+              href="https://github.com/iceXshadow/stackframe"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"

@@ -11,59 +11,71 @@ stackframe/
 ├── 📂 src/
 │   ├── 📂 app/
 │   │   ├── 📂 api/
-│   │   │   ├── 📂 generate/         # POST: Trigger Kestra flow
-│   │   │   │   └── route.ts         # ✅ Updated to call Kestra API
-│   │   │   ├── 📂 webhooks/         # (Coming Soon: Listen for Git Action success)
+│   │   │   ├── 📂 generate/         # (Planned: POST endpoint to trigger Kestra flow)
 │   │   │   │   └── route.ts
-│   │   │   ├── 📂 feedback/         # (Optional: Submit RLHF feedback)
+│   │   │   ├── 📂 deploy/           # (Planned: Deployment endpoints)
+│   │   │   ├── 📂 feedback/         # (Planned: Submit RLHF feedback)
 │   │   │   │   └── route.ts
-│   │   ├── 📂 dashboard/            # The Main Demo App
-│   │   │   └── page.tsx             # ✅ "Mission Control" UI
-│   │   ├── layout.tsx
-│   │   ├── page.tsx                 # ✅ "Apple Style" Landing Page
-│   │   └── globals.css
+│   │   │   ├── 📂 pr/               # (Planned: PR management)
+│   │   │   ├── 📂 preview/          # (Planned: Preview endpoints)
+│   │   │   └── 📂 webhooks/         # (Coming Soon: Listen for Git Action success)
+│   │   │       └── route.ts
+│   │   ├── 📂 (root)/
+│   │   │   └── 📂 dashboard/        # The Main Demo App
+│   │   │       └── page.tsx         # ✅ "Mission Control" UI
+│   │   ├── layout.tsx               # ✅
+│   │   ├── page.tsx                 # ✅ Landing Page
+│   │   └── globals.css              # ✅
 │   │
 │   ├── 📂 components/
-│   │   ├── 📂 landing/              # Landing page components
+│   │   ├── architect-form.tsx       # ✅
+│   │   ├── footer.tsx               # ✅
+│   │   ├── navbar.tsx               # ✅
+│   │   ├── 📂 ui/                   # ✅ shadcn/ui components
+│   │   │   ├── alert.tsx
+│   │   │   ├── button.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   └── textarea.tsx
+│   │   ├── 📂 landing/              # (Planned: Landing page components)
 │   │   │   ├── Hero.tsx
 │   │   │   ├── MagicInput.tsx
 │   │   │   └── BentoGrid.tsx
-│   │   ├── 📂 dashboard/            # Dashboard components
-│   │   │   ├── ArchitectureView.tsx
-│   │   │   ├── CostCard.tsx
-│   │   │   └── Terminal.tsx
+│   │   └── 📂 dashboard/            # (Planned: Dashboard components)
+│   │       ├── ArchitectureView.tsx
+│   │       ├── CostCard.tsx
+│   │       └── Terminal.tsx
 │   │
 │   ├── 📂 lib/                      # Shared Logic
-│   │   ├── 📂 integrations/
+│   │   ├── utils.ts                 # ✅
+│   │   ├── 📂 integrations/         # (Planned: API integrations)
 │   │   │   ├── kestra.ts
 │   │   │   ├── oumi.ts
 │   │   │   └── github.ts
-│   │   └── 📂 utils/
+│   │   └── 📂 utils/                # (Planned: Utility modules)
 │   │       └── pricing.ts
 │
-├── 📂 kestra/                       # ✅ The Brain (Orchestrator)
-│   ├── docker-compose.yml           # ✅ Runs Kestra + Oumi together
-│   ├── 📂 flows/                    # (Optional: Store local copies of flows)
-│   │   ├── stackframe-architect.yaml # The Flow definition we pasted into UI
-│   │   └── governance.yaml
+├── 📂 kestra/
+│   ├── docker-compose.yml           # ✅
+│   └── 📂 flows/                    # (Planned: Kestra workflow definitions)
+│       ├── stackframe-architect.yaml
+│       └── governance.yaml
 │
-├── 📂 oumi/                         # ✅ The Intelligence (AI Engine)
-│   ├── main.py                      # ✅ FastAPI app (The "Mock" Oumi)
-│   ├── Dockerfile                   # ✅ Python Docker config
-│   ├── requirements.txt             # ✅ Dependencies
-│   └── 📂 data/                     # (Optional: Training data for RLHF)
+├── 📂 oumi/
+│   ├── main.py                      # ✅
+│   ├── Dockerfile                   # ✅
+│   ├── requirements.txt             # ✅
+│   └── 📂 data/                     # (Planned: Training data)
 │       └── terraform-instruct.jsonl
 │
-├── 📂 terraform/                    # (Coming Next: The Output)
-│   ├── main.tf                      # The file Oumi will eventually write to
+├── 📂 terraform/                    # (Planned: Infrastructure as Code)
+│   ├── main.tf
 │   └── backend.tf
 │
-├── .coderabbit.yaml                 # ✅ Security Auditor Config
-├── .env.local                       # Environment variables
+├── .coderabbit.yaml                 # (Planned: CodeRabbit config)
+├── .env.local                       # (Gitignored)
 ├── package.json
 ├── tailwind.config.ts
 ├── tsconfig.json
 └── README.md
 ```
-
-## 🎯 Key Directories Explained

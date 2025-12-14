@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
 
   kestra:
-    image: kestra/kestra:1.0
+    image: kestra/kestra:latest
     container_name: kestra
     command: server standalone
     ports:
@@ -114,7 +114,8 @@ services:
       dockerfile: Dockerfile
     container_name: oumi-engine
     ports:
-      - "8000:8000"
+      # Bind to localhost only for local development
+      - "127.0.0.1:8000:8000"
     environment:
       # API key for Oumi engine authentication
       # For production: use Docker secrets or external secrets manager

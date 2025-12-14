@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field, field_validator
 import random
 import logging
@@ -14,6 +15,39 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
+# Exception handlers for consistent error response format
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """
+    Convert HTTPException to ErrorResponse format for consistent API responses.
+    This ensures all errors follow the same schema.
+    """
+    error_response = ErrorResponse(
+        error="Unauthorized" if exc.status_code == 401 else "HTTPException",
+        message=str(exc.detail),
+        status_code=exc.status_code
+    )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=error_response.model_dump()
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Convert Pydantic validation errors to ErrorResponse format.
+    """
+    error_response = ErrorResponse(
+        error="ValidationError",
+        message="Request validation failed",
+        status_code=422,
+        details={"errors": exc.errors()}
+    )
+    return JSONResponse(
+        status_code=422,
+        content=error_response.model_dump()
+    )
 
 # API Key Authentication
 # In production, store this in environment variables or secrets manager
@@ -53,6 +87,9 @@ async def verify_api_key(x_api_key: str = Header(..., description="API key for a
     """
     Dependency to verify API key from request headers.
     
+    SECURITY: Raises HTTPException on authentication failure to properly stop request processing.
+    Returning a JSONResponse from a dependency does NOT prevent the endpoint from executing.
+    
     In production:
     - Store API keys in a secure database or secrets manager
     - Use hashed API keys for comparison
@@ -62,14 +99,9 @@ async def verify_api_key(x_api_key: str = Header(..., description="API key for a
     """
     if x_api_key != API_KEY:
         logger.warning("Authentication failed: Invalid API key provided")
-        error_response = ErrorResponse(
-            error="Unauthorized",
-            message="Invalid API key. Please provide a valid X-API-Key header.",
-            status_code=401
-        )
-        return JSONResponse(
+        raise HTTPException(
             status_code=401,
-            content=error_response.model_dump()
+            detail="Invalid API key. Please provide a valid X-API-Key header."
         )
     return x_api_key
 

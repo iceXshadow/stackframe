@@ -37,17 +37,20 @@
 services:
   # Docker Socket Proxy - provides secure, limited access to Docker API
   # Only exposes necessary Docker API endpoints to Kestra
+  # SECURITY: POST and BUILD are disabled (set to 0) for least privilege
+  # Kestra only requires read access to: CONTAINERS, IMAGES, INFO, NETWORKS, VOLUMES
+  # This prevents arbitrary container creation or image building through the proxy
   docker-socket-proxy:
     image: tecnativa/docker-socket-proxy:latest
     container_name: docker-socket-proxy
     environment:
-      - CONTAINERS=1
-      - IMAGES=1
-      - INFO=1
-      - NETWORKS=1
-      - VOLUMES=1
-      - POST=1
-      - BUILD=1
+      - CONTAINERS=1    # Required: List and inspect containers
+      - IMAGES=1        # Required: List and inspect images
+      - INFO=1          # Required: Get Docker daemon info
+      - NETWORKS=1      # Required: List and inspect networks
+      - VOLUMES=1       # Required: List and inspect volumes
+      - POST=0          # DISABLED: Prevents container/image creation
+      - BUILD=0         # DISABLED: Prevents image building
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:

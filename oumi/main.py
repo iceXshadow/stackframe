@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 import random
 import logging
 import os
@@ -25,15 +25,17 @@ class InfraRequest(BaseModel):
     budget: int = Field(..., ge=0, le=1000000, description="Budget in USD (0-1,000,000)")
     cloudProvider: str = Field(..., description="Cloud provider (aws, azure, gcp)")
     
-    @validator('projectName')
-    def validate_project_name(cls, v):
+    @field_validator("projectName")
+    @classmethod
+    def validate_project_name(cls, v: str) -> str:
         """Validate project name contains only alphanumeric, dash, underscore"""
         if not all(c.isalnum() or c in '-_' for c in v):
             raise ValueError('projectName must contain only alphanumeric characters, dashes, and underscores')
         return v.lower()
     
-    @validator('cloudProvider')
-    def validate_cloud_provider(cls, v):
+    @field_validator("cloudProvider")
+    @classmethod
+    def validate_cloud_provider(cls, v: str) -> str:
         """Validate cloud provider is supported"""
         allowed = ['aws', 'azure', 'gcp']
         if v.lower() not in allowed:
@@ -59,14 +61,15 @@ async def verify_api_key(x_api_key: str = Header(..., description="API key for a
     - Rotate keys regularly
     """
     if x_api_key != API_KEY:
-        logger.warning(f"Authentication failed: Invalid API key provided")
-        raise HTTPException(
+        logger.warning("Authentication failed: Invalid API key provided")
+        error_response = ErrorResponse(
+            error="Unauthorized",
+            message="Invalid API key. Please provide a valid X-API-Key header.",
+            status_code=401
+        )
+        return JSONResponse(
             status_code=401,
-            detail={
-                "error": "Unauthorized",
-                "message": "Invalid API key. Please provide a valid X-API-Key header.",
-                "status_code": 401
-            }
+            content=error_response.model_dump()
         )
     return x_api_key
 
@@ -123,33 +126,35 @@ async def generate(req: InfraRequest):
     except ValueError as ve:
         # Validation errors - 400 Bad Request
         logger.warning(f"Validation error for project {req.projectName}: {str(ve)}")
-        raise HTTPException(
+        error_response = ErrorResponse(
+            error="ValidationError",
+            message=str(ve),
             status_code=400,
-            detail={
-                "error": "ValidationError",
-                "message": str(ve),
-                "status_code": 400,
-                "details": {
-                    "projectName": req.projectName,
-                    "cloudProvider": req.cloudProvider
-                }
+            details={
+                "projectName": req.projectName,
+                "cloudProvider": req.cloudProvider
             }
+        )
+        return JSONResponse(
+            status_code=400,
+            content=error_response.model_dump()
         )
     
     except Exception as e:
         # Unexpected errors - 500 Internal Server Error
         logger.error(f"Unexpected error processing request for {req.projectName}: {str(e)}", exc_info=True)
-        raise HTTPException(
+        error_response = ErrorResponse(
+            error="InternalServerError",
+            message="An unexpected error occurred while generating infrastructure code. Please try again later.",
             status_code=500,
-            detail={
-                "error": "InternalServerError",
-                "message": "An unexpected error occurred while generating infrastructure code. Please try again later.",
-                "status_code": 500,
-                "details": {
-                    "projectName": req.projectName,
-                    "error_type": type(e).__name__
-                }
+            details={
+                "projectName": req.projectName,
+                "error_type": type(e).__name__
             }
+        )
+        return JSONResponse(
+            status_code=500,
+            content=error_response.model_dump()
         )
 
 @app.get("/health")
